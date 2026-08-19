@@ -1,0 +1,5 @@
+node_modules/
+.wrangler/
+.dev.vars
+credenciais-geradas.txt
+.DS_Store

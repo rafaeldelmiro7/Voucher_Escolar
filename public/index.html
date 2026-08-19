@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acesso | Campanha de Matrícula ASuR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/login.css" />
+</head>
+<body>
+  <!-- Camada decorativa (puramente visual, não interativa) -->
+  <div class="decor-layer" aria-hidden="true">
+    <svg class="decor-icon decor-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5.5C3 4.7 3.7 4 4.5 4H11v16H4.5c-.8 0-1.5-.7-1.5-1.5v-13Z"/><path d="M21 5.5c0-.8-.7-1.5-1.5-1.5H13v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z"/><path d="M11 4v16"/></svg>
+    <svg class="decor-icon decor-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m14.5 3.5 6 6L8 22H2v-6L14.5 3.5Z"/><path d="m13 5 6 6"/></svg>
+    <svg class="decor-icon decor-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2.5l2.7 5.7 6.2.7-4.6 4.3 1.2 6.2L12 16.6l-5.5 2.8 1.2-6.2-4.6-4.3 6.2-.7L12 2.5Z"/></svg>
+    <svg class="decor-icon decor-notebook" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 3v18M12 8h6M12 12h6M12 16h4"/></svg>
+    <svg class="decor-icon decor-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3 3 10.5l7 2.5M21 3 13.5 21l-2.5-8M21 3 10.5 13.5"/></svg>
+    <svg class="decor-icon decor-backpack" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 8V6a5 5 0 0 1 10 0v2"/><rect x="5" y="8" width="14" height="13" rx="2.5"/><path d="M9 8v4h6V8M9 21v-4h6v4"/></svg>
+    <svg class="decor-icon decor-star2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2.5l2.7 5.7 6.2.7-4.6 4.3 1.2 6.2L12 16.6l-5.5 2.8 1.2-6.2-4.6-4.3 6.2-.7L12 2.5Z"/></svg>
+    <svg class="decor-icon decor-eraser" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.5 20H20"/><path d="m6 16 8.5-8.5a2 2 0 0 1 2.8 0l2.2 2.2a2 2 0 0 1 0 2.8L11 21H6.5a1 1 0 0 1-.7-1.7L6 18"/></svg>
+  </div>
+
+  <div class="auth-shell">
+    <div class="auth-card login-card">
+      <div class="brand">
+        <img src="/img/logo-asur.jpg" class="brand-badge" alt="Rede Adventista de Educação" />
+        <span>
+          Rede Adventista de Educação
+          <small>ASuR &middot; Campanha de Matrícula</small>
+        </span>
+      </div>
+
+      <div class="login-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 9.5 12 5l10 4.5-10 4.5-10-4.5Z" />
+          <path d="M6 11.8v4.2c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-4.2" />
+          <path d="M20 9.5V16" />
+        </svg>
+      </div>
+
+      <h1>Acesso ao sistema</h1>
+      <p class="sub">Entre com o e-mail da sua unidade escolar ou da loja conveniada.</p>
+      <div class="login-divider" aria-hidden="true"></div>
+
+      <div id="alert-box"></div>
+
+      <form id="login-form">
+        <div class="field">
+          <label for="email">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 6.5 9 6.5 9-6.5"/></svg>
+            E-mail
+          </label>
+          <input type="email" id="email" autocomplete="username" required />
+        </div>
+        <div class="field">
+          <label for="password">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M7.5 10.5V7a4.5 4.5 0 0 1 9 0v3.5"/></svg>
+            Senha
+          </label>
+          <input type="password" id="password" autocomplete="current-password" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block login-submit" id="submit-btn">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+          Entrar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    const form = document.getElementById("login-form");
+    const alertBox = document.getElementById("alert-box");
+    const submitBtn = document.getElementById("submit-btn");
+
+    // Se já estiver logado, redireciona direto para o painel.
+    api
+      .get("/api/auth/me")
+      .then((data) => {
+        if (data.authenticated) {
+          window.location.href = data.role === "escola" ? "/escola/" : "/loja/";
+        }
+      })
+      .catch(() => {});
+
+    form.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      alertBox.innerHTML = "";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Entrando...";
+      try {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const data = await api.post("/api/auth/login", { email, password });
+        window.location.href = data.role === "escola" ? "/escola/" : "/loja/";
+      } catch (e) {
+        alertBox.innerHTML = `<div class="alert alert-error">${e.message}</div>`;
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Entrar";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+/*
+  Redesign visual da tela de login (raiz do site).
+  Carregado SOMENTE nesta página — não afeta os painéis de escola/loja.
+  Mesma linguagem visual da tela "Nova matrícula": azul + dourado + branco
+  em tons pastel. Puramente visual: nenhuma regra aqui depende de ou altera
+  IDs, nomes, bindings ou o comportamento do script de login.
+*/
+
+:root {
+  --edu-blue: #1769e0;
+  --edu-blue-dark: #0b376d;
+  --edu-blue-pale: #eef5ff;
+  --edu-gold: #d9a544;
+  --edu-gold-strong: #c9922c;
+  --edu-gold-light: #f5d78e;
+  --edu-cream: #fff8e8;
+}
+
+/* ---------- Fundo da página ---------- */
+body {
+  background:
+    radial-gradient(circle at 8% 12%, rgba(23, 105, 224, 0.07), transparent 42%),
+    radial-gradient(circle at 94% 88%, rgba(217, 165, 68, 0.10), transparent 45%),
+    linear-gradient(115deg, #eef5ff 0%, #f7fafd 28%, #ffffff 50%, #fdf9f0 72%, #fff8e8 100%);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ---------- Camada decorativa (livros, lápis, etc.) ---------- */
+.decor-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.decor-icon {
+  position: absolute;
+  color: var(--edu-blue);
+  opacity: 0.055;
+}
+
+.decor-icon.decor-book,
+.decor-icon.decor-notebook,
+.decor-icon.decor-backpack {
+  color: var(--edu-blue-dark);
+}
+
+.decor-icon.decor-star,
+.decor-icon.decor-star2,
+.decor-icon.decor-pencil {
+  color: var(--edu-gold);
+  opacity: 0.08;
+}
+
+.decor-book { width: 130px; top: 8%; left: -2%; transform: rotate(-8deg); }
+.decor-pencil { width: 90px; top: 62%; left: 3%; transform: rotate(18deg); }
+.decor-star { width: 40px; top: 20%; left: 12%; }
+.decor-notebook { width: 110px; top: 80%; left: 6%; transform: rotate(6deg); }
+.decor-plane { width: 100px; top: 14%; right: 2%; transform: rotate(10deg); color: var(--edu-blue-dark); }
+.decor-backpack { width: 110px; top: 55%; right: -1%; transform: rotate(-6deg); }
+.decor-star2 { width: 34px; top: 78%; right: 10%; }
+.decor-eraser { width: 80px; top: 34%; right: 8%; transform: rotate(-14deg); color: var(--edu-gold); opacity: 0.07; }
+
+@media (max-width: 1100px) {
+  .decor-icon { opacity: 0.04; }
+  .decor-backpack, .decor-book { width: 90px; }
+}
+
+@media (max-width: 860px) {
+  .decor-layer { display: none; }
+}
+
+/* ---------- Card de login ---------- */
+.auth-shell {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-card.login-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(11, 55, 109, 0.06);
+  border-radius: 22px;
+  padding: 40px 40px 44px;
+  box-shadow: 0 15px 45px rgba(30, 60, 100, 0.08);
+  max-width: 420px;
+}
+
+.login-card .brand {
+  justify-content: flex-start;
+  margin-bottom: 22px;
+}
+
+.login-card .brand-badge {
+  box-shadow: 0 4px 12px -2px rgba(23, 105, 224, 0.35);
+}
+
+.login-card .brand small {
+  color: var(--edu-gold-strong);
+  font-weight: 600;
+}
+
+.login-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid var(--edu-gold-light);
+  color: var(--edu-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px -4px rgba(217, 165, 68, 0.35);
+  margin: 0 auto 18px;
+}
+
+.login-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.login-card h1 {
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--edu-blue-dark);
+  letter-spacing: -0.01em;
+}
+
+.login-card p.sub {
+  font-size: 13.5px;
+}
+
+.login-divider {
+  width: 100%;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--edu-gold), var(--edu-gold-light));
+  margin: 20px auto 26px;
+}
+
+/* ---------- Campos ---------- */
+.login-card .field label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--edu-blue-dark);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.login-card .field-icon {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: var(--edu-gold-strong);
+}
+
+.login-card input[type="email"],
+.login-card input[type="password"] {
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid rgba(40, 90, 170, 0.15);
+  background: rgba(248, 251, 255, 0.9);
+  padding: 0 14px;
+  box-shadow: 0 1px 2px rgba(11, 55, 109, 0.03);
+  transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+}
+
+.login-card input[type="email"]:hover,
+.login-card input[type="password"]:hover {
+  border-color: rgba(23, 105, 224, 0.3);
+}
+
+.login-card input[type="email"]:focus,
+.login-card input[type="password"]:focus {
+  border-color: var(--edu-blue);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.1);
+}
+
+/* ---------- Botão Entrar ---------- */
+.login-submit {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--edu-blue), #1454b8);
+  box-shadow: 0 10px 24px -8px rgba(23, 105, 224, 0.45);
+  transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
+}
+
+.login-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -8px rgba(23, 105, 224, 0.55);
+  filter: brightness(1.03);
+}
+
+.login-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.login-submit .btn-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--edu-gold-light);
+  flex: none;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 560px) {
+  .auth-shell {
+    padding: 20px;
+  }
+
+  .auth-card.login-card {
+    padding: 30px 24px 34px;
+    border-radius: 18px;
+  }
+
+  .login-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .login-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .login-card h1 {
+    font-size: 19px;
+  }
+}
+
+/* ---------- Acessibilidade ---------- */
+.login-card input:focus-visible,
+.login-submit:focus-visible {
+  outline: 2px solid var(--edu-blue);
+  outline-offset: 2px;
+}

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel da Loja Conveniada | Campanha de Matrícula ASuR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/loja/loja.css" />
+</head>
+<body>
+  <!-- Camada decorativa (puramente visual, não interativa) -->
+  <div class="decor-layer" aria-hidden="true">
+    <svg class="decor-icon decor-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5.5C3 4.7 3.7 4 4.5 4H11v16H4.5c-.8 0-1.5-.7-1.5-1.5v-13Z"/><path d="M21 5.5c0-.8-.7-1.5-1.5-1.5H13v16h6.5c.8 0 1.5-.7 1.5-1.5v-13Z"/><path d="M11 4v16"/></svg>
+    <svg class="decor-icon decor-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m14.5 3.5 6 6L8 22H2v-6L14.5 3.5Z"/><path d="m13 5 6 6"/></svg>
+    <svg class="decor-icon decor-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2.5l2.7 5.7 6.2.7-4.6 4.3 1.2 6.2L12 16.6l-5.5 2.8 1.2-6.2-4.6-4.3 6.2-.7L12 2.5Z"/></svg>
+    <svg class="decor-icon decor-notebook" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 3v18M12 8h6M12 12h6M12 16h4"/></svg>
+    <svg class="decor-icon decor-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3 3 10.5l7 2.5M21 3 13.5 21l-2.5-8M21 3 10.5 13.5"/></svg>
+    <svg class="decor-icon decor-backpack" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 8V6a5 5 0 0 1 10 0v2"/><rect x="5" y="8" width="14" height="13" rx="2.5"/><path d="M9 8v4h6V8M9 21v-4h6v4"/></svg>
+    <svg class="decor-icon decor-star2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2.5l2.7 5.7 6.2.7-4.6 4.3 1.2 6.2L12 16.6l-5.5 2.8 1.2-6.2-4.6-4.3 6.2-.7L12 2.5Z"/></svg>
+    <svg class="decor-icon decor-eraser" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.5 20H20"/><path d="m6 16 8.5-8.5a2 2 0 0 1 2.8 0l2.2 2.2a2 2 0 0 1 0 2.8L11 21H6.5a1 1 0 0 1-.7-1.7L6 18"/></svg>
+  </div>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="app-header-inner">
+        <a href="/" class="brand">
+          <img src="/img/logo-asur.jpg" class="brand-badge" alt="Rede Adventista de Educação" />
+          <span>
+            Rede Adventista de Educação
+            <small>Painel da Loja Conveniada</small>
+          </span>
+        </a>
+        <nav class="admin-nav" id="admin-nav" style="display:none">
+          <a href="/escola/" class="admin-nav-link" data-nav="escola">Matrículas</a>
+          <a href="/loja/" class="admin-nav-link" data-nav="loja">Retiradas</a>
+        </nav>
+        <div style="display:flex;align-items:center;gap:16px">
+          <div class="who">
+            <b id="who-nome">-</b>
+            <span id="who-role-label">Loja conveniada</span>
+          </div>
+          <button class="btn btn-outline btn-sm" id="logout-btn">Sair</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div class="panel retiradas-card">
+        <div class="retiradas-card-header">
+          <div class="retiradas-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 7 12 3 4 7l8 4 8-4Z" />
+              <path d="M4 7v10l8 4 8-4V7" />
+              <path d="M12 11v10" />
+            </svg>
+          </div>
+          <div class="retiradas-card-title">
+            <h2>Retiradas de material escolar</h2>
+            <p class="retiradas-subtitle">Confira as matrículas com voucher e registre a entrega do material.</p>
+          </div>
+          <span id="total-label" class="retiradas-total"></span>
+        </div>
+        <div class="retiradas-divider" aria-hidden="true"></div>
+
+        <div class="search-box">
+          <div class="search-input-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="search-input" placeholder="Buscar por aluno, responsável, CPF ou RA..." />
+          </div>
+          <select id="status-filter">
+            <option value="aguardando_retirada">Aguardando retirada</option>
+            <option value="retirado">Já retirado</option>
+            <option value="">Todos</option>
+          </select>
+          <select id="unidade-filter">
+            <option value="">Todas as unidades</option>
+          </select>
+          <button type="button" class="btn btn-outline btn-sm print-btn" id="print-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg>
+            Imprimir relatório
+          </button>
+        </div>
+
+        <div id="lista-wrap" class="table-wrap">
+          <p class="loading">Carregando...</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modal-backdrop" style="display:none">
+    <div class="modal">
+      <div class="modal-title">
+        <h3>Registrar retirada</h3>
+        <button class="close-btn" id="modal-close">&times;</button>
+      </div>
+
+      <dl class="detail-list" id="modal-detail"></dl>
+
+      <div id="modal-alert"></div>
+
+      <form id="retirada-form">
+        <div class="field">
+          <label for="retirada_nome">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7.5" r="4"/></svg>
+            Nome de quem está retirando
+          </label>
+          <input type="text" id="retirada_nome" required />
+          <div class="hint">Pode ser o responsável ou alguém autorizado por ele.</div>
+        </div>
+
+        <div class="field">
+          <label for="parentesco">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3.2"/><circle cx="17" cy="7" r="2.6"/><path d="M2.5 20v-1.5A4.5 4.5 0 0 1 7 14h2a4.5 4.5 0 0 1 4.5 4.5V20"/><path d="M14.5 14.3A4 4 0 0 1 21.5 17v3"/></svg>
+            Grau de parentesco
+          </label>
+          <select id="parentesco" required>
+            <option value="" disabled selected>Selecione...</option>
+            <option value="Pai">Pai</option>
+            <option value="Mãe">Mãe</option>
+            <option value="Avô">Avô</option>
+            <option value="Avó">Avó</option>
+            <option value="Tio(a)">Tio(a)</option>
+            <option value="Irmão(a)">Irmão(a)</option>
+            <option value="Responsável legal">Responsável legal</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="foto_input">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1-2h7l1 2h2A1.5 1.5 0 0 1 20 8.5v9A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5v-9Z"/><circle cx="12" cy="12.5" r="3.3"/></svg>
+            Foto de quem retirou
+          </label>
+          <input type="file" id="foto_input" accept="image/*" capture="environment" required />
+          <img id="foto_preview" class="photo-preview" style="display:none" />
+        </div>
+
+        <div class="field">
+          <label>
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c2-3 3.5-3 5 0s3-3 5 0 3-3 5 0"/><path d="M17 5.5 19 3l2 2-2.2 2.2A4 4 0 0 1 16 8.5l.1-1.4a4 4 0 0 1 .9-1.6Z"/></svg>
+            Assinatura
+          </label>
+          <div class="sig-wrap">
+            <canvas id="sig-canvas"></canvas>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm sig-clear-btn" id="sig-clear">Limpar assinatura</button>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:10px">
+          <button type="submit" class="btn btn-primary btn-block retirada-submit" id="confirmar-btn">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            Confirmar retirada
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/loja/app.js"></script>
+</body>
+</html>

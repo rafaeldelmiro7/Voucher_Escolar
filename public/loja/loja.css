@@ -1,0 +1,506 @@
+/*
+  Redesign visual do Painel da Loja Conveniada.
+  Carregado SOMENTE nesta página — não afeta login nem o painel da escola.
+  Mesma linguagem visual das demais telas: azul + dourado + branco em tons
+  pastel. Puramente visual: nenhuma regra aqui depende de ou altera IDs,
+  nomes, bindings ou o comportamento do loja/app.js.
+*/
+
+:root {
+  --edu-blue: #1769e0;
+  --edu-blue-dark: #0b376d;
+  --edu-blue-pale: #eef5ff;
+  --edu-gold: #d9a544;
+  --edu-gold-strong: #c9922c;
+  --edu-gold-light: #f5d78e;
+  --edu-cream: #fff8e8;
+}
+
+/* ---------- Fundo da página ---------- */
+body {
+  background:
+    radial-gradient(circle at 8% 12%, rgba(23, 105, 224, 0.07), transparent 42%),
+    radial-gradient(circle at 94% 88%, rgba(217, 165, 68, 0.10), transparent 45%),
+    linear-gradient(115deg, #eef5ff 0%, #f7fafd 28%, #ffffff 50%, #fdf9f0 72%, #fff8e8 100%);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ---------- Camada decorativa (livros, lápis, etc.) ---------- */
+.decor-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.decor-icon {
+  position: absolute;
+  color: var(--edu-blue);
+  opacity: 0.055;
+}
+
+.decor-icon.decor-book,
+.decor-icon.decor-notebook,
+.decor-icon.decor-backpack {
+  color: var(--edu-blue-dark);
+}
+
+.decor-icon.decor-star,
+.decor-icon.decor-star2,
+.decor-icon.decor-pencil {
+  color: var(--edu-gold);
+  opacity: 0.08;
+}
+
+.decor-book { width: 130px; top: 8%; left: -2%; transform: rotate(-8deg); }
+.decor-pencil { width: 90px; top: 62%; left: 3%; transform: rotate(18deg); }
+.decor-star { width: 40px; top: 20%; left: 12%; }
+.decor-notebook { width: 110px; top: 80%; left: 6%; transform: rotate(6deg); }
+.decor-plane { width: 100px; top: 14%; right: 2%; transform: rotate(10deg); color: var(--edu-blue-dark); }
+.decor-backpack { width: 110px; top: 55%; right: -1%; transform: rotate(-6deg); }
+.decor-star2 { width: 34px; top: 78%; right: 10%; }
+.decor-eraser { width: 80px; top: 34%; right: 8%; transform: rotate(-14deg); color: var(--edu-gold); opacity: 0.07; }
+
+@media (max-width: 1100px) {
+  .decor-icon { opacity: 0.04; }
+  .decor-backpack, .decor-book { width: 90px; }
+}
+
+@media (max-width: 860px) {
+  .decor-layer { display: none; }
+}
+
+/* ---------- Cabeçalho institucional ---------- */
+.app-header {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(11, 55, 109, 0.08);
+  box-shadow: 0 6px 24px -12px rgba(11, 55, 109, 0.18);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-header-inner {
+  padding: 16px 28px;
+}
+
+.app-header .brand-badge {
+  box-shadow: 0 4px 12px -2px rgba(23, 105, 224, 0.35);
+}
+
+.app-header .brand small {
+  color: var(--edu-gold-strong);
+  font-weight: 600;
+}
+
+.app-header .who {
+  padding-right: 4px;
+  border-right: 1px solid rgba(11, 55, 109, 0.12);
+  margin-right: 2px;
+}
+
+.app-header .who b {
+  color: var(--edu-blue-dark);
+}
+
+.app-header #logout-btn {
+  border-radius: 999px;
+  border-color: rgba(11, 55, 109, 0.16);
+  color: var(--edu-blue-dark);
+  transition: border-color 200ms ease, color 200ms ease;
+}
+
+.app-header #logout-btn:hover {
+  border-color: var(--edu-blue);
+  color: var(--edu-blue);
+}
+
+/* ---------- Container principal ---------- */
+.app-main {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Card principal ---------- */
+.panel.retiradas-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(11, 55, 109, 0.06);
+  border-radius: 22px;
+  padding: 32px 36px 36px;
+  box-shadow: 0 15px 45px rgba(30, 60, 100, 0.08);
+}
+
+.retiradas-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.retiradas-icon {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid var(--edu-gold-light);
+  color: var(--edu-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px -4px rgba(217, 165, 68, 0.35);
+}
+
+.retiradas-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.retiradas-card-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.retiradas-card-title h2 {
+  margin: 0 0 3px;
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--edu-blue-dark);
+  letter-spacing: -0.01em;
+}
+
+.retiradas-subtitle {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+.retiradas-total {
+  flex: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--edu-gold-strong);
+  background: var(--edu-cream);
+  border: 1px solid var(--edu-gold-light);
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.retiradas-divider {
+  width: 100%;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--edu-gold), var(--edu-gold-light));
+  margin: 18px 0 24px;
+}
+
+/* ---------- Busca e filtro ---------- */
+.search-box {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.search-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+  max-width: 380px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--edu-gold-strong);
+  pointer-events: none;
+}
+
+.search-box input[type="text"] {
+  width: 100%;
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid rgba(40, 90, 170, 0.15);
+  background: rgba(248, 251, 255, 0.9);
+  padding: 0 14px 0 40px;
+  box-shadow: 0 1px 2px rgba(11, 55, 109, 0.03);
+  transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+}
+
+.search-box select {
+  height: 46px;
+  border-radius: 999px;
+  border: 1px solid rgba(40, 90, 170, 0.15);
+  background: rgba(248, 251, 255, 0.9);
+  padding: 0 18px;
+  font-weight: 600;
+  color: var(--edu-blue-dark);
+  max-width: 220px;
+}
+
+.search-box input[type="text"]:hover,
+.search-box select:hover {
+  border-color: rgba(23, 105, 224, 0.3);
+}
+
+.search-box input[type="text"]:focus,
+.search-box select:focus {
+  border-color: var(--edu-blue);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.1);
+}
+
+.print-btn {
+  height: 46px;
+  border-radius: 999px;
+  border-color: rgba(217, 165, 68, 0.4);
+  color: var(--edu-gold-strong);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.print-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.print-btn:hover {
+  border-color: var(--edu-gold);
+  background: var(--edu-cream);
+}
+
+/* ---------- Tabela ---------- */
+.retiradas-card table th {
+  color: var(--edu-blue-dark);
+  opacity: 0.65;
+}
+
+.retiradas-card table tbody tr:hover {
+  background: var(--edu-blue-pale);
+}
+
+.retiradas-card .badge-pending {
+  background: var(--edu-cream);
+  color: var(--edu-gold-strong);
+}
+
+.retiradas-card .badge-done {
+  background: #eefaf1;
+  color: #1a8f4c;
+}
+
+.retiradas-card .badge-none {
+  background: #f1f5f9;
+  color: var(--text-muted);
+}
+
+.retiradas-card table button[data-id] {
+  border-radius: 999px;
+}
+
+/* ---------- Modal "Registrar retirada" ---------- */
+.modal-backdrop {
+  background: rgba(11, 55, 109, 0.32);
+  backdrop-filter: blur(2px);
+}
+
+.modal {
+  border-radius: 22px;
+  box-shadow: 0 20px 55px rgba(30, 60, 100, 0.22);
+  border: 1px solid rgba(11, 55, 109, 0.06);
+}
+
+.modal-title h3 {
+  color: var(--edu-blue-dark);
+  font-weight: 800;
+}
+
+.modal .detail-list dt {
+  color: var(--edu-gold-strong);
+  font-weight: 700;
+}
+
+.modal .detail-list dd {
+  color: var(--edu-blue-dark);
+}
+
+.modal .field label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--edu-blue-dark);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.modal .field-icon {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: var(--edu-gold-strong);
+}
+
+.modal input[type="text"],
+.modal input[type="file"],
+.modal select {
+  border-radius: 12px;
+  border: 1px solid rgba(40, 90, 170, 0.15);
+  background: rgba(248, 251, 255, 0.9);
+  transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+}
+
+.modal input[type="text"],
+.modal select {
+  height: 46px;
+  padding: 0 14px;
+  width: 100%;
+  color: var(--edu-blue-dark);
+  font-weight: 500;
+}
+
+.modal input[type="file"] {
+  padding: 10px 12px;
+}
+
+.modal input[type="text"]:focus,
+.modal select:focus {
+  border-color: var(--edu-blue);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.1);
+}
+
+/* Área de assinatura */
+.sig-wrap {
+  border-radius: 12px;
+  border: 1px solid rgba(40, 90, 170, 0.15);
+  background: rgba(248, 251, 255, 0.6);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.sig-wrap:focus-within {
+  border-color: var(--edu-blue);
+  box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.1);
+}
+
+.sig-clear-btn {
+  border-radius: 999px;
+  color: var(--edu-gold-strong);
+}
+
+.sig-clear-btn:hover {
+  color: var(--edu-gold);
+}
+
+/* ---------- Botão Confirmar retirada ---------- */
+.retirada-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--edu-blue), #1454b8);
+  box-shadow: 0 10px 24px -8px rgba(23, 105, 224, 0.45);
+  transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
+}
+
+.retirada-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -8px rgba(23, 105, 224, 0.55);
+  filter: brightness(1.03);
+}
+
+.retirada-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.retirada-submit .btn-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--edu-gold-light);
+  flex: none;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 900px) {
+  .panel.retiradas-card {
+    padding: 26px 22px 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .retiradas-card-header {
+    flex-wrap: wrap;
+  }
+
+  .retiradas-total {
+    order: 3;
+  }
+
+  .search-box {
+    flex-direction: column;
+  }
+
+  .search-input-wrap {
+    max-width: none;
+  }
+
+  .search-box select {
+    max-width: none;
+  }
+
+  .print-btn {
+    margin-left: 0;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-header-inner {
+    padding: 14px 18px;
+  }
+
+  .panel.retiradas-card {
+    padding: 20px 16px 24px;
+    border-radius: 18px;
+  }
+
+  .retiradas-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .retiradas-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .retiradas-card-title h2 {
+    font-size: 18px;
+  }
+
+  .modal {
+    padding: 22px;
+  }
+}
+
+/* ---------- Acessibilidade ---------- */
+.search-box input:focus-visible,
+.search-box select:focus-visible,
+.modal input:focus-visible,
+.modal select:focus-visible,
+.retirada-submit:focus-visible,
+.sig-clear-btn:focus-visible,
+.app-header #logout-btn:focus-visible {
+  outline: 2px solid var(--edu-blue);
+  outline-offset: 2px;
+}

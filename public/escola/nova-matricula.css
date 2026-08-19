@@ -1,0 +1,489 @@
+/*
+  Redesign visual do Painel da Escola (tela "Nova matrícula").
+  Carregado SOMENTE nesta página — não afeta login nem o painel da loja.
+  Puramente visual: nenhuma regra aqui depende de ou altera IDs, nomes,
+  bindings ou comportamento do app.js.
+*/
+
+:root {
+  --edu-blue: #1769e0;
+  --edu-blue-dark: #0b376d;
+  --edu-blue-pale: #eef5ff;
+  --edu-gold: #d9a544;
+  --edu-gold-strong: #c9922c;
+  --edu-gold-light: #f5d78e;
+  --edu-cream: #fff8e8;
+}
+
+/* ---------- Fundo da página ---------- */
+body {
+  background:
+    radial-gradient(circle at 8% 12%, rgba(23, 105, 224, 0.07), transparent 42%),
+    radial-gradient(circle at 94% 88%, rgba(217, 165, 68, 0.10), transparent 45%),
+    linear-gradient(115deg, #eef5ff 0%, #f7fafd 28%, #ffffff 50%, #fdf9f0 72%, #fff8e8 100%);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ---------- Camada decorativa (livros, lápis, etc.) ---------- */
+.decor-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.decor-icon {
+  position: absolute;
+  color: var(--edu-blue);
+  opacity: 0.055;
+}
+
+.decor-icon.decor-book,
+.decor-icon.decor-notebook,
+.decor-icon.decor-backpack {
+  color: var(--edu-blue-dark);
+}
+
+.decor-icon.decor-star,
+.decor-icon.decor-star2,
+.decor-icon.decor-pencil {
+  color: var(--edu-gold);
+  opacity: 0.08;
+}
+
+.decor-book { width: 130px; top: 8%; left: -2%; transform: rotate(-8deg); }
+.decor-pencil { width: 90px; top: 62%; left: 3%; transform: rotate(18deg); }
+.decor-star { width: 40px; top: 20%; left: 12%; }
+.decor-notebook { width: 110px; top: 80%; left: 6%; transform: rotate(6deg); }
+.decor-plane { width: 100px; top: 14%; right: 2%; transform: rotate(10deg); color: var(--edu-blue-dark); }
+.decor-backpack { width: 110px; top: 55%; right: -1%; transform: rotate(-6deg); }
+.decor-star2 { width: 34px; top: 78%; right: 10%; }
+.decor-eraser { width: 80px; top: 34%; right: 8%; transform: rotate(-14deg); color: var(--edu-gold); opacity: 0.07; }
+
+/* Mantém a região central limpa e evita poluição/overflow em telas menores */
+@media (max-width: 1100px) {
+  .decor-icon { opacity: 0.04; }
+  .decor-backpack, .decor-book { width: 90px; }
+}
+
+@media (max-width: 860px) {
+  .decor-layer { display: none; }
+}
+
+/* ---------- Cabeçalho institucional ---------- */
+.app-header {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(11, 55, 109, 0.08);
+  box-shadow: 0 6px 24px -12px rgba(11, 55, 109, 0.18);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-header-inner {
+  padding: 16px 28px;
+}
+
+.app-header .brand-badge {
+  box-shadow: 0 4px 12px -2px rgba(23, 105, 224, 0.35);
+}
+
+.app-header .brand small {
+  color: var(--edu-gold-strong);
+  font-weight: 600;
+}
+
+.app-header .who {
+  padding-right: 4px;
+  border-right: 1px solid rgba(11, 55, 109, 0.12);
+  margin-right: 2px;
+}
+
+.app-header .who b {
+  color: var(--edu-blue-dark);
+}
+
+.app-header #logout-btn {
+  border-radius: 999px;
+  border-color: rgba(11, 55, 109, 0.16);
+  color: var(--edu-blue-dark);
+  transition: border-color 200ms ease, color 200ms ease, transform 200ms ease;
+}
+
+.app-header #logout-btn:hover {
+  border-color: var(--edu-blue);
+  color: var(--edu-blue);
+}
+
+/* ---------- Container principal ---------- */
+.app-main {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Card "Nova matrícula" ---------- */
+.panel.matricula-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(11, 55, 109, 0.06);
+  border-radius: 22px;
+  padding: 36px 40px 40px;
+  box-shadow: 0 15px 45px rgba(30, 60, 100, 0.08);
+}
+
+.matricula-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.matricula-icon {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid var(--edu-gold-light);
+  color: var(--edu-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px -4px rgba(217, 165, 68, 0.35);
+}
+
+.matricula-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.matricula-card-header h2 {
+  margin: 0 0 3px;
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--edu-blue-dark);
+  letter-spacing: -0.01em;
+}
+
+.matricula-subtitle {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+.matricula-divider {
+  width: 100%;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--edu-gold), var(--edu-gold-light));
+  margin: 18px 0 26px;
+}
+
+/* ---------- Campos do formulário ---------- */
+.matricula-fields {
+  row-gap: 26px;
+  column-gap: 24px;
+  margin-bottom: 8px;
+}
+
+.matricula-card .field label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--edu-blue-dark);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.field-icon {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: var(--edu-gold-strong);
+}
+
+/* ---------- Inputs ---------- */
+.matricula-card input[type="text"],
+.matricula-card input[type="email"],
+.matricula-card input[type="tel"],
+.matricula-card input[type="date"] {
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid rgba(40, 90, 170, 0.15);
+  background: rgba(248, 251, 255, 0.9);
+  padding: 0 14px;
+  box-shadow: 0 1px 2px rgba(11, 55, 109, 0.03);
+  transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+}
+
+.matricula-card input[type="text"]:hover,
+.matricula-card input[type="email"]:hover,
+.matricula-card input[type="tel"]:hover,
+.matricula-card input[type="date"]:hover {
+  border-color: rgba(23, 105, 224, 0.3);
+}
+
+.matricula-card input[type="text"]:focus,
+.matricula-card input[type="email"]:focus,
+.matricula-card input[type="tel"]:focus,
+.matricula-card input[type="date"]:focus {
+  border-color: var(--edu-blue);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.1);
+}
+
+/* Campo preenchido automaticamente pelo sistema (não editável) */
+.matricula-card input:disabled {
+  background: var(--edu-blue-pale);
+  border-color: rgba(23, 105, 224, 0.12);
+  color: var(--edu-blue-dark);
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* ---------- Botão Cadastrar matrícula ---------- */
+.matricula-submit {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--edu-blue), #1454b8);
+  box-shadow: 0 10px 24px -8px rgba(23, 105, 224, 0.45);
+  transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
+}
+
+.matricula-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -8px rgba(23, 105, 224, 0.55);
+  filter: brightness(1.03);
+}
+
+.matricula-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.matricula-submit .btn-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--edu-gold-light);
+}
+
+/* ---------- Painel "Matrículas cadastradas" (harmonização leve) ---------- */
+.app-main .panel:not(.matricula-card) {
+  border-radius: 20px;
+  box-shadow: 0 12px 34px rgba(30, 60, 100, 0.06);
+}
+
+.app-main .panel:not(.matricula-card) table tbody tr:hover {
+  background: var(--edu-blue-pale);
+}
+
+.app-main .panel:not(.matricula-card) .badge-pending {
+  background: var(--edu-cream);
+  color: var(--edu-gold-strong);
+}
+
+.app-main .panel:not(.matricula-card) .badge-done {
+  background: #eefaf1;
+  color: #1a8f4c;
+}
+
+.app-main .panel:not(.matricula-card) .badge-none {
+  background: #f1f5f9;
+  color: var(--text-muted);
+}
+
+/* ---------- Ações da tabela (ver / editar / excluir) ---------- */
+.row-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: 1px solid rgba(40, 90, 170, 0.15);
+  background: rgba(248, 251, 255, 0.9);
+  color: var(--edu-blue-dark);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.icon-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.icon-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.icon-btn-view:hover:not(:disabled) {
+  border-color: var(--edu-blue);
+  color: var(--edu-blue);
+  background: var(--edu-blue-pale);
+}
+
+.icon-btn-edit:hover:not(:disabled) {
+  border-color: var(--edu-gold);
+  color: var(--edu-gold-strong);
+  background: var(--edu-cream);
+}
+
+.icon-btn-delete:hover:not(:disabled) {
+  border-color: #dc2626;
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+.icon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ---------- Modal (ver / editar matrícula) ---------- */
+.modal-backdrop {
+  background: rgba(11, 55, 109, 0.32);
+  backdrop-filter: blur(2px);
+}
+
+.modal {
+  border-radius: 22px;
+  box-shadow: 0 20px 55px rgba(30, 60, 100, 0.22);
+  border: 1px solid rgba(11, 55, 109, 0.06);
+}
+
+.modal-title h3 {
+  color: var(--edu-blue-dark);
+  font-weight: 800;
+}
+
+.modal .detail-list dt {
+  color: var(--edu-gold-strong);
+  font-weight: 700;
+}
+
+.modal .detail-list dd {
+  color: var(--edu-blue-dark);
+}
+
+.modal .field label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--edu-blue-dark);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.modal .field-icon {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: var(--edu-gold-strong);
+}
+
+.modal input[type="text"],
+.modal input[type="email"],
+.modal input[type="tel"],
+.modal input[type="date"] {
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid rgba(40, 90, 170, 0.15);
+  background: rgba(248, 251, 255, 0.9);
+  padding: 0 14px;
+  transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+}
+
+.modal input[type="text"]:focus,
+.modal input[type="email"]:focus,
+.modal input[type="tel"]:focus,
+.modal input[type="date"]:focus {
+  border-color: var(--edu-blue);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.1);
+}
+
+.modal input:disabled {
+  background: var(--edu-blue-pale);
+  border-color: rgba(23, 105, 224, 0.12);
+  color: var(--edu-blue-dark);
+  font-weight: 600;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* O modal tem largura fixa e estreita: mantém o formulário de edição em coluna única */
+#edit-form .matricula-fields {
+  grid-template-columns: 1fr;
+  row-gap: 18px;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 900px) {
+  .panel.matricula-card {
+    padding: 28px 24px 30px;
+  }
+
+  .matricula-fields {
+    row-gap: 20px;
+    column-gap: 18px;
+  }
+}
+
+@media (max-width: 700px) {
+  .matricula-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-header-inner {
+    padding: 14px 18px;
+  }
+
+  .panel.matricula-card {
+    padding: 22px 18px 26px;
+    border-radius: 18px;
+  }
+
+  .matricula-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .matricula-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .matricula-card-header h2 {
+    font-size: 18px;
+  }
+
+  .matricula-submit {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .modal {
+    padding: 22px;
+  }
+}
+
+/* ---------- Acessibilidade: foco perceptível também via teclado ---------- */
+.matricula-card input:focus-visible,
+.matricula-submit:focus-visible,
+.modal input:focus-visible,
+.icon-btn:focus-visible,
+.app-header #logout-btn:focus-visible {
+  outline: 2px solid var(--edu-blue);
+  outline-offset: 2px;
+}

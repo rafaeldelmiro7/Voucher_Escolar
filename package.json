@@ -1,0 +1,18 @@
+{
+  "name": "voucher-matricula-asur",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sistema de campanha de matrícula com voucher de material escolar - Rede Adventista de Educação (ASuR)",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev public",
+    "deploy": "wrangler pages deploy public",
+    "db:migrate:local": "wrangler d1 execute voucher-matricula-db --local --file=migrations/0001_init.sql && wrangler d1 execute voucher-matricula-db --local --file=migrations/0002_add_parentesco.sql && wrangler d1 execute voucher-matricula-db --local --file=migrations/0003_add_admin_role.sql && wrangler d1 execute voucher-matricula-db --local --file=migrations/0004_add_voucher_valor.sql && wrangler d1 execute voucher-matricula-db --local --file=migrations/0005_backfill_voucher_valor.sql",
+    "db:migrate:remote": "wrangler d1 execute voucher-matricula-db --remote --file=migrations/0001_init.sql && wrangler d1 execute voucher-matricula-db --remote --file=migrations/0002_add_parentesco.sql && wrangler d1 execute voucher-matricula-db --remote --file=migrations/0003_add_admin_role.sql && wrangler d1 execute voucher-matricula-db --remote --file=migrations/0004_add_voucher_valor.sql && wrangler d1 execute voucher-matricula-db --remote --file=migrations/0005_backfill_voucher_valor.sql",
+    "db:seed:local": "node scripts/seed-users.mjs --local",
+    "db:seed:remote": "node scripts/seed-users.mjs --remote"
+  },
+  "devDependencies": {
+    "wrangler": "^3.114.17"
+  }
+}
