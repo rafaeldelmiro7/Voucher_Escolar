@@ -51,7 +51,7 @@ export async function onRequestPatch({ request, env, params }) {
   await env.DB.prepare(
     `UPDATE matriculas
      SET nome_responsavel = ?, cpf_responsavel = ?, email = ?, telefone = ?,
-         nome_aluno = ?, ra_aluno = ?, data_matricula = ?, voucher_valor = ?, aluno_novo = ?
+         nome_aluno = ?, ra_aluno = ?, serie_aluno = ?, data_matricula = ?, voucher_valor = ?, aluno_novo = ?
      WHERE id = ?`
   )
     .bind(
@@ -61,6 +61,7 @@ export async function onRequestPatch({ request, env, params }) {
       values.telefone,
       values.nome_aluno,
       values.ra_aluno,
+      values.serie_aluno,
       values.data_matricula,
       voucherValor,
       alunoNovo,

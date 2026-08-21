@@ -207,7 +207,8 @@ body {
 .matricula-card input[type="text"],
 .matricula-card input[type="email"],
 .matricula-card input[type="tel"],
-.matricula-card input[type="date"] {
+.matricula-card input[type="date"],
+.matricula-card select {
   height: 46px;
   border-radius: 12px;
   border: 1px solid rgba(40, 90, 170, 0.15);
@@ -220,14 +221,16 @@ body {
 .matricula-card input[type="text"]:hover,
 .matricula-card input[type="email"]:hover,
 .matricula-card input[type="tel"]:hover,
-.matricula-card input[type="date"]:hover {
+.matricula-card input[type="date"]:hover,
+.matricula-card select:hover {
   border-color: rgba(23, 105, 224, 0.3);
 }
 
 .matricula-card input[type="text"]:focus,
 .matricula-card input[type="email"]:focus,
 .matricula-card input[type="tel"]:focus,
-.matricula-card input[type="date"]:focus {
+.matricula-card input[type="date"]:focus,
+.matricula-card select:focus {
   border-color: var(--edu-blue);
   background: #fff;
   box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.1);
@@ -393,7 +396,8 @@ body {
 .modal input[type="text"],
 .modal input[type="email"],
 .modal input[type="tel"],
-.modal input[type="date"] {
+.modal input[type="date"],
+.modal select {
   height: 46px;
   border-radius: 12px;
   border: 1px solid rgba(40, 90, 170, 0.15);
@@ -405,7 +409,8 @@ body {
 .modal input[type="text"]:focus,
 .modal input[type="email"]:focus,
 .modal input[type="tel"]:focus,
-.modal input[type="date"]:focus {
+.modal input[type="date"]:focus,
+.modal select:focus {
   border-color: var(--edu-blue);
   background: #fff;
   box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.1);

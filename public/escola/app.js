@@ -50,6 +50,7 @@ function renderLista(matriculas) {
         <tr>
           <th>Aluno</th>
           <th>RA</th>
+          <th>Série</th>
           <th>Responsável</th>
           <th>CPF</th>
           ${isAdmin ? "<th>Unidade</th>" : ""}
@@ -67,6 +68,7 @@ function renderLista(matriculas) {
           <tr>
             <td>${m.nome_aluno}</td>
             <td>${m.ra_aluno}</td>
+            <td>${m.serie_aluno || "-"}</td>
             <td>${m.nome_responsavel}</td>
             <td>${formatCPFDisplay(m.cpf_responsavel)}</td>
             ${isAdmin ? `<td>${m.unidade_sigla || "-"}</td>` : ""}
@@ -122,6 +124,7 @@ function openViewModal(id) {
   let html = [
     detailRow("Aluno", m.nome_aluno),
     detailRow("RA", m.ra_aluno),
+    detailRow("Série", m.serie_aluno || "-"),
     detailRow("Responsável", m.nome_responsavel),
     detailRow("CPF", formatCPFDisplay(m.cpf_responsavel)),
     detailRow("E-mail", m.email),
@@ -168,6 +171,7 @@ function openEditModal(id) {
   document.getElementById("edit_telefone").value = maskPhone(m.telefone);
   document.getElementById("edit_nome_aluno").value = m.nome_aluno;
   document.getElementById("edit_ra_aluno").value = m.ra_aluno;
+  document.getElementById("edit_serie_aluno").value = m.serie_aluno || "";
   document.getElementById("edit_data_matricula").value = m.data_matricula;
   document.getElementById("edit_aluno_novo").checked = !!m.aluno_novo;
   atualizarValorVoucherEdit();
@@ -214,6 +218,7 @@ document.getElementById("edit-form").addEventListener("submit", async (ev) => {
     telefone: document.getElementById("edit_telefone").value,
     nome_aluno: document.getElementById("edit_nome_aluno").value.trim(),
     ra_aluno: document.getElementById("edit_ra_aluno").value.trim(),
+    serie_aluno: document.getElementById("edit_serie_aluno").value,
     data_matricula: document.getElementById("edit_data_matricula").value,
     aluno_novo: document.getElementById("edit_aluno_novo").checked,
   };
@@ -329,6 +334,7 @@ document.getElementById("matricula-form").addEventListener("submit", async (ev) 
     telefone: document.getElementById("telefone").value,
     nome_aluno: document.getElementById("nome_aluno").value.trim(),
     ra_aluno: document.getElementById("ra_aluno").value.trim(),
+    serie_aluno: document.getElementById("serie_aluno").value,
     data_matricula: document.getElementById("data_matricula").value,
     aluno_novo: document.getElementById("aluno_novo").checked,
   };

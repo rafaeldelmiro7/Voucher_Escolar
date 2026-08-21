@@ -26,6 +26,7 @@ const usuarios = [
   { email: "cassia.caroline@adventistas.org", role: "escola", unidadeSigla: "EAJI", nome: "EAJI - Escola Adventista de Ji-Paraná" },
   { email: "dara.rodrigues@adventistas.org", role: "escola", unidadeSigla: "EAV", nome: "EAV - Escola Adventista de Vilhena" },
   { email: "wesley.ffrigeri@adventistas.org", role: "loja", unidadeSigla: null, nome: "Loja SELS" },
+  { email: "didaticos.asur@adventistas.org", role: "loja", unidadeSigla: null, nome: "Didáticos ASuR" },
   { email: "rafael.delmiro@adventistas.org", role: "loja", unidadeSigla: null, nome: "Rafael Delmiro", isAdmin: true },
   { email: "micelio.reis@adventistas.org", role: "loja", unidadeSigla: null, nome: "Micélio Reis", isAdmin: true },
 ];

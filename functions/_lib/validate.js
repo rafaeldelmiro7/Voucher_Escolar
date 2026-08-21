@@ -41,6 +41,7 @@ export function validateMatriculaFields(body) {
     telefone: onlyDigits(body.telefone || ""),
     nome_aluno: (body.nome_aluno || "").trim(),
     ra_aluno: (body.ra_aluno || "").trim(),
+    serie_aluno: (body.serie_aluno || "").trim(),
     data_matricula: (body.data_matricula || "").trim(),
   };
 
@@ -51,6 +52,7 @@ export function validateMatriculaFields(body) {
   if (values.telefone.length < 10) erros.push("Telefone inválido.");
   if (!values.nome_aluno) erros.push("Nome do aluno é obrigatório.");
   if (!values.ra_aluno) erros.push("RA do aluno é obrigatório.");
+  if (!values.serie_aluno) erros.push("Série do aluno é obrigatória.");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(values.data_matricula)) erros.push("Data da matrícula inválida.");
 
   return { values, erros };
