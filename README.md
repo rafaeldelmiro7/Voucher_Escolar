@@ -173,6 +173,27 @@ se necessário — o valor é recalculado a cada cadastro e a cada edição.
 Matrículas cadastradas antes dessa funcionalidade existir mostram "Fora do
 período da campanha" (não tinham valor salvo).
 
+### Aluno novo → Kit Escolar
+
+No cadastro/edição da matrícula há um checkbox **"Aluno novo"**. Quando
+marcado, o campo "Valor do voucher" mostra **"Kit Escolar"** em vez do valor
+em dinheiro por data — o aluno tem direito ao voucher, só que em material
+escolar. Isso não muda nada no fluxo de retirada da loja (ela nunca exibiu
+esse valor); é só informativo para a escola.
+
+## Foto da retirada: arquivo ou câmera
+
+No formulário de retirada (painel da loja), a foto de quem retirou pode vir
+de duas fontes, escolhidas por abas:
+
+- **Arquivo** — seleção normal de um arquivo de imagem já existente.
+- **Câmera** — abre a câmera do dispositivo (via `getUserMedia`, exige HTTPS
+  ou `localhost`) direto na página, com botão "Tirar foto" e "Tirar outra
+  foto" para refazer antes de confirmar a retirada.
+
+Qualquer uma das duas gera o mesmo arquivo enviado ao servidor; a câmera é
+liberada automaticamente ao trocar de aba, tirar a foto ou fechar o modal.
+
 ## Observações importantes
 
 - **CPF, e-mail e telefone são validados** no cadastro (dígito verificador do

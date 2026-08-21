@@ -5,6 +5,10 @@ let isAdmin = false;
 
 const modalBackdrop = document.getElementById("modal-backdrop");
 
+function displayVoucherValor(m) {
+  return m.aluno_novo ? "Kit Escolar" : formatVoucherValor(m.voucher_valor);
+}
+
 function statusBadge(m) {
   if (!m.voucher_elegivel) return '<span class="badge badge-none">Sem voucher</span>';
   if (m.status === "retirado") return '<span class="badge badge-done">Retirado</span>';
@@ -69,7 +73,7 @@ function renderLista(matriculas) {
             <td>${formatDate(m.data_matricula)}</td>
             <td>${formatDateTime(m.criado_em)}</td>
             <td>${statusBadge(m)}</td>
-            <td>${formatVoucherValor(m.voucher_valor)}</td>
+            <td>${displayVoucherValor(m)}</td>
             <td>${actionButtons(m)}</td>
           </tr>`
           )
@@ -125,7 +129,8 @@ function openViewModal(id) {
     ...(isAdmin ? [detailRow("Unidade", m.unidade_nome || "-")] : []),
     detailRow("Data da matrícula", formatDate(m.data_matricula)),
     detailRow("Voucher", m.voucher_elegivel ? "#" + m.voucher_numero : "Sem voucher"),
-    detailRow("Valor do voucher", formatVoucherValor(m.voucher_valor)),
+    detailRow("Aluno novo", m.aluno_novo ? "Sim" : "Não"),
+    detailRow("Valor do voucher", displayVoucherValor(m)),
     detailRow("Status", m.status === "retirado" ? "Retirado" : "Aguardando retirada"),
   ].join("");
 
@@ -164,7 +169,8 @@ function openEditModal(id) {
   document.getElementById("edit_nome_aluno").value = m.nome_aluno;
   document.getElementById("edit_ra_aluno").value = m.ra_aluno;
   document.getElementById("edit_data_matricula").value = m.data_matricula;
-  document.getElementById("edit_voucher_valor_display").value = formatVoucherValor(calcularVoucherValor(m.data_matricula));
+  document.getElementById("edit_aluno_novo").checked = !!m.aluno_novo;
+  atualizarValorVoucherEdit();
 
   document.getElementById("edit-form").style.display = "block";
   modalBackdrop.style.display = "flex";
@@ -209,6 +215,7 @@ document.getElementById("edit-form").addEventListener("submit", async (ev) => {
     nome_aluno: document.getElementById("edit_nome_aluno").value.trim(),
     ra_aluno: document.getElementById("edit_ra_aluno").value.trim(),
     data_matricula: document.getElementById("edit_data_matricula").value,
+    aluno_novo: document.getElementById("edit_aluno_novo").checked,
   };
 
   try {
@@ -282,15 +289,25 @@ async function init() {
 
 function atualizarValorVoucherDisplay() {
   const data = document.getElementById("data_matricula").value;
-  document.getElementById("voucher_valor_display").value = formatVoucherValor(calcularVoucherValor(data));
+  const alunoNovo = document.getElementById("aluno_novo").checked;
+  document.getElementById("voucher_valor_display").value = alunoNovo
+    ? "Kit Escolar"
+    : formatVoucherValor(calcularVoucherValor(data));
+}
+
+function atualizarValorVoucherEdit() {
+  const data = document.getElementById("edit_data_matricula").value;
+  const alunoNovo = document.getElementById("edit_aluno_novo").checked;
+  document.getElementById("edit_voucher_valor_display").value = alunoNovo
+    ? "Kit Escolar"
+    : formatVoucherValor(calcularVoucherValor(data));
 }
 
 document.getElementById("data_matricula").addEventListener("change", atualizarValorVoucherDisplay);
+document.getElementById("aluno_novo").addEventListener("change", atualizarValorVoucherDisplay);
 
-document.getElementById("edit_data_matricula").addEventListener("change", () => {
-  const data = document.getElementById("edit_data_matricula").value;
-  document.getElementById("edit_voucher_valor_display").value = formatVoucherValor(calcularVoucherValor(data));
-});
+document.getElementById("edit_data_matricula").addEventListener("change", atualizarValorVoucherEdit);
+document.getElementById("edit_aluno_novo").addEventListener("change", atualizarValorVoucherEdit);
 
 document.getElementById("logout-btn").addEventListener("click", async () => {
   await api.post("/api/auth/logout");
@@ -313,6 +330,7 @@ document.getElementById("matricula-form").addEventListener("submit", async (ev) 
     nome_aluno: document.getElementById("nome_aluno").value.trim(),
     ra_aluno: document.getElementById("ra_aluno").value.trim(),
     data_matricula: document.getElementById("data_matricula").value,
+    aluno_novo: document.getElementById("aluno_novo").checked,
   };
 
   if (isAdmin) {

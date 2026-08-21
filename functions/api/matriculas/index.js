@@ -5,7 +5,7 @@ import { calcularVoucherValor } from "../../_lib/voucherValor.js";
 export const SELECT_FIELDS = `
   m.id, m.nome_responsavel, m.cpf_responsavel, m.email, m.telefone,
   m.nome_aluno, m.ra_aluno, m.data_matricula, m.unidade_id, m.criado_em,
-  m.voucher_numero, m.voucher_elegivel, m.voucher_valor, m.status,
+  m.voucher_numero, m.voucher_elegivel, m.voucher_valor, m.aluno_novo, m.status,
   m.retirada_nome, m.retirada_data, m.retirada_foto_key, m.retirada_assinatura_key,
   m.retirada_parentesco,
   un.sigla AS unidade_sigla, un.nome AS unidade_nome
@@ -109,12 +109,13 @@ export async function onRequestPost({ request, env }) {
   }
 
   const voucherValor = calcularVoucherValor(data_matricula);
+  const alunoNovo = body.aluno_novo ? 1 : 0;
 
   const result = await env.DB.prepare(
     `INSERT INTO matriculas
       (nome_responsavel, cpf_responsavel, email, telefone, nome_aluno, ra_aluno, data_matricula,
-       unidade_id, criado_por, voucher_numero, voucher_elegivel, voucher_valor)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+       unidade_id, criado_por, voucher_numero, voucher_elegivel, voucher_valor, aluno_novo)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   )
     .bind(
       nome_responsavel,
@@ -128,7 +129,8 @@ export async function onRequestPost({ request, env }) {
       session.uid,
       voucherNumero,
       voucherElegivel,
-      voucherValor
+      voucherValor,
+      alunoNovo
     )
     .run();
 

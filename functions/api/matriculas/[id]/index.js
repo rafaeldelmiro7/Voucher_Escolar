@@ -46,11 +46,12 @@ export async function onRequestPatch({ request, env, params }) {
   }
 
   const voucherValor = calcularVoucherValor(values.data_matricula);
+  const alunoNovo = body.aluno_novo ? 1 : 0;
 
   await env.DB.prepare(
     `UPDATE matriculas
      SET nome_responsavel = ?, cpf_responsavel = ?, email = ?, telefone = ?,
-         nome_aluno = ?, ra_aluno = ?, data_matricula = ?, voucher_valor = ?
+         nome_aluno = ?, ra_aluno = ?, data_matricula = ?, voucher_valor = ?, aluno_novo = ?
      WHERE id = ?`
   )
     .bind(
@@ -62,6 +63,7 @@ export async function onRequestPatch({ request, env, params }) {
       values.ra_aluno,
       values.data_matricula,
       voucherValor,
+      alunoNovo,
       id
     )
     .run();

@@ -125,13 +125,23 @@
                 <option value="" disabled selected>Selecione a unidade...</option>
               </select>
             </div>
+            <div class="field checkbox-field">
+              <label class="checkbox-label" for="aluno_novo">
+                <input type="checkbox" id="aluno_novo" class="checkbox-input" />
+                <span class="checkbox-box" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                </span>
+                <span class="checkbox-text">Aluno novo</span>
+              </label>
+              <div class="hint">Primeira matrícula do aluno — o voucher será um Kit Escolar (material), não em dinheiro.</div>
+            </div>
             <div class="field">
               <label>
                 <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5a2.5 2.5 0 0 1 2.5-1c1.5 0 2.5.8 2.5 2s-1 1.7-2.5 2-2.5.8-2.5 2 1 2 2.5 2a2.5 2.5 0 0 0 2.5-1"/></svg>
                 Valor do voucher
               </label>
               <input type="text" id="voucher_valor_display" disabled />
-              <div class="hint">Calculado automaticamente pela data da matrícula.</div>
+              <div class="hint">Calculado automaticamente pela data da matrícula (ou Kit Escolar, se aluno novo).</div>
             </div>
           </div>
           <button type="submit" class="btn btn-primary matricula-submit" id="submit-btn">
@@ -214,6 +224,15 @@
               Data da matrícula
             </label>
             <input type="date" id="edit_data_matricula" required />
+          </div>
+          <div class="field checkbox-field">
+            <label class="checkbox-label" for="edit_aluno_novo">
+              <input type="checkbox" id="edit_aluno_novo" class="checkbox-input" />
+              <span class="checkbox-box" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <span class="checkbox-text">Aluno novo</span>
+            </label>
           </div>
           <div class="field">
             <label>

@@ -131,11 +131,38 @@
         </div>
 
         <div class="field">
-          <label for="foto_input">
+          <label>
             <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1-2h7l1 2h2A1.5 1.5 0 0 1 20 8.5v9A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5v-9Z"/><circle cx="12" cy="12.5" r="3.3"/></svg>
             Foto de quem retirou
           </label>
-          <input type="file" id="foto_input" accept="image/*" capture="environment" required />
+
+          <div class="foto-source-tabs" role="tablist">
+            <button type="button" class="foto-source-btn active" data-source="arquivo" id="foto-tab-arquivo" role="tab" aria-selected="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6"/></svg>
+              Arquivo
+            </button>
+            <button type="button" class="foto-source-btn" data-source="camera" id="foto-tab-camera" role="tab" aria-selected="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1-2h7l1 2h2A1.5 1.5 0 0 1 20 8.5v9A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5v-9Z"/><circle cx="12" cy="12.5" r="3.3"/></svg>
+              Câmera
+            </button>
+          </div>
+
+          <div id="foto-arquivo-panel" class="foto-source-panel">
+            <input type="file" id="foto_input" accept="image/*" />
+          </div>
+
+          <div id="foto-camera-panel" class="foto-source-panel" style="display:none">
+            <div class="camera-wrap">
+              <video id="camera-video" autoplay playsinline muted></video>
+              <canvas id="camera-canvas" style="display:none"></canvas>
+            </div>
+            <div id="camera-alert"></div>
+            <div class="camera-actions">
+              <button type="button" class="btn btn-outline btn-sm" id="camera-capture-btn">Tirar foto</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="camera-retake-btn" style="display:none">Tirar outra foto</button>
+            </div>
+          </div>
+
           <img id="foto_preview" class="photo-preview" style="display:none" />
         </div>
 

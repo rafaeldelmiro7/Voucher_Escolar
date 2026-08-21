@@ -6,7 +6,7 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "voucher-matricula-db"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "cb5ce1cb-0353-4ec9-911e-dc4bf0d457b2"
 
 # Armazenamento R2 (fotos de retirada e assinaturas)
 [[r2_buckets]]

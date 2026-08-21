@@ -369,6 +369,71 @@ body {
 
 .modal input[type="file"] {
   padding: 10px 12px;
+  width: 100%;
+}
+
+/* ---------- Abas Arquivo / Câmera ---------- */
+.foto-source-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.foto-source-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(40, 90, 170, 0.18);
+  background: #fff;
+  color: var(--edu-blue-dark);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.foto-source-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.foto-source-btn:hover {
+  border-color: var(--edu-blue);
+}
+
+.foto-source-btn.active {
+  background: var(--edu-blue);
+  border-color: var(--edu-blue);
+  color: #fff;
+}
+
+.foto-source-panel {
+  margin-top: 4px;
+}
+
+.camera-wrap {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0b1220;
+  border: 1px solid rgba(40, 90, 170, 0.2);
+}
+
+#camera-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.camera-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .modal input[type="text"]:focus,
@@ -500,6 +565,9 @@ body {
 .modal select:focus-visible,
 .retirada-submit:focus-visible,
 .sig-clear-btn:focus-visible,
+.foto-source-btn:focus-visible,
+#camera-capture-btn:focus-visible,
+#camera-retake-btn:focus-visible,
 .app-header #logout-btn:focus-visible {
   outline: 2px solid var(--edu-blue);
   outline-offset: 2px;

@@ -55,15 +55,119 @@ canvas.addEventListener("pointermove", (ev) => {
 
 document.getElementById("sig-clear").addEventListener("click", clearSignature);
 
-document.getElementById("foto_input").addEventListener("change", (ev) => {
+// ---------- Foto: Arquivo ou Câmera ----------
+let cameraStream = null;
+let capturedPhotoBlob = null;
+
+const fotoInput = document.getElementById("foto_input");
+const fotoPreview = document.getElementById("foto_preview");
+const cameraVideo = document.getElementById("camera-video");
+const cameraCanvas = document.getElementById("camera-canvas");
+const arquivoPanel = document.getElementById("foto-arquivo-panel");
+const cameraPanel = document.getElementById("foto-camera-panel");
+const tabArquivo = document.getElementById("foto-tab-arquivo");
+const tabCamera = document.getElementById("foto-tab-camera");
+const cameraCaptureBtn = document.getElementById("camera-capture-btn");
+const cameraRetakeBtn = document.getElementById("camera-retake-btn");
+const cameraAlert = document.getElementById("camera-alert");
+
+function stopCameraStream() {
+  if (cameraStream) {
+    cameraStream.getTracks().forEach((t) => t.stop());
+    cameraStream = null;
+  }
+  cameraVideo.srcObject = null;
+}
+
+async function startCameraStream() {
+  cameraAlert.innerHTML = "";
+  cameraVideo.style.display = "block";
+  cameraCaptureBtn.style.display = "inline-flex";
+  cameraRetakeBtn.style.display = "none";
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment" },
+      audio: false,
+    });
+    cameraVideo.srcObject = cameraStream;
+  } catch {
+    cameraAlert.innerHTML =
+      '<div class="alert alert-error">Não foi possível acessar a câmera. Verifique a permissão do navegador ou use a opção "Arquivo".</div>';
+    cameraVideo.style.display = "none";
+    cameraCaptureBtn.style.display = "none";
+  }
+}
+
+function resetFotoSelection() {
+  capturedPhotoBlob = null;
+  fotoInput.value = "";
+  fotoPreview.style.display = "none";
+  fotoPreview.src = "";
+  stopCameraStream();
+  cameraAlert.innerHTML = "";
+  cameraVideo.style.display = "block";
+  cameraCanvas.style.display = "none";
+  cameraCaptureBtn.style.display = "inline-flex";
+  cameraRetakeBtn.style.display = "none";
+}
+
+function switchFotoSource(source) {
+  resetFotoSelection();
+  const isArquivo = source === "arquivo";
+  tabArquivo.classList.toggle("active", isArquivo);
+  tabArquivo.setAttribute("aria-selected", String(isArquivo));
+  tabCamera.classList.toggle("active", !isArquivo);
+  tabCamera.setAttribute("aria-selected", String(!isArquivo));
+  arquivoPanel.style.display = isArquivo ? "block" : "none";
+  cameraPanel.style.display = isArquivo ? "none" : "block";
+  if (!isArquivo) startCameraStream();
+}
+
+function getFotoFile() {
+  if (capturedPhotoBlob) {
+    return new File([capturedPhotoBlob], "foto-camera.jpg", { type: "image/jpeg" });
+  }
+  return fotoInput.files[0] || null;
+}
+
+tabArquivo.addEventListener("click", () => switchFotoSource("arquivo"));
+tabCamera.addEventListener("click", () => switchFotoSource("camera"));
+
+cameraCaptureBtn.addEventListener("click", () => {
+  if (!cameraStream) return;
+  cameraCanvas.width = cameraVideo.videoWidth;
+  cameraCanvas.height = cameraVideo.videoHeight;
+  cameraCanvas.getContext("2d").drawImage(cameraVideo, 0, 0);
+  cameraCanvas.toBlob(
+    (blob) => {
+      capturedPhotoBlob = blob;
+      fotoPreview.src = URL.createObjectURL(blob);
+      fotoPreview.style.display = "block";
+    },
+    "image/jpeg",
+    0.9
+  );
+  stopCameraStream();
+  cameraVideo.style.display = "none";
+  cameraCaptureBtn.style.display = "none";
+  cameraRetakeBtn.style.display = "inline-flex";
+});
+
+cameraRetakeBtn.addEventListener("click", () => {
+  capturedPhotoBlob = null;
+  fotoPreview.style.display = "none";
+  startCameraStream();
+});
+
+fotoInput.addEventListener("change", (ev) => {
   const file = ev.target.files[0];
-  const preview = document.getElementById("foto_preview");
   if (!file) {
-    preview.style.display = "none";
+    fotoPreview.style.display = "none";
     return;
   }
-  preview.src = URL.createObjectURL(file);
-  preview.style.display = "block";
+  capturedPhotoBlob = null;
+  fotoPreview.src = URL.createObjectURL(file);
+  fotoPreview.style.display = "block";
 });
 
 function statusBadge(m) {
@@ -181,7 +285,7 @@ function openModal(id) {
   } else {
     form.style.display = "block";
     form.reset();
-    document.getElementById("foto_preview").style.display = "none";
+    switchFotoSource("arquivo");
     modalBackdrop.style.display = "flex";
     setTimeout(() => {
       setupCanvas();
@@ -195,6 +299,7 @@ function openModal(id) {
 function closeModal() {
   modalBackdrop.style.display = "none";
   matriculaSelecionada = null;
+  stopCameraStream();
 }
 
 document.getElementById("modal-close").addEventListener("click", closeModal);
@@ -217,9 +322,9 @@ document.getElementById("retirada-form").addEventListener("submit", async (ev) =
     alertBox.innerHTML = '<div class="alert alert-error">Colete a assinatura de quem está retirando.</div>';
     return;
   }
-  const fotoFile = document.getElementById("foto_input").files[0];
+  const fotoFile = getFotoFile();
   if (!fotoFile) {
-    alertBox.innerHTML = '<div class="alert alert-error">Anexe a foto de quem está retirando.</div>';
+    alertBox.innerHTML = '<div class="alert alert-error">Anexe a foto de quem está retirando (arquivo ou câmera).</div>';
     return;
   }
 

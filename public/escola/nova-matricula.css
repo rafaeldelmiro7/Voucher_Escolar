@@ -420,6 +420,78 @@ body {
   cursor: not-allowed;
 }
 
+/* ---------- Checkbox "Aluno novo" (card e modal) ---------- */
+.checkbox-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.checkbox-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  height: 46px;
+  margin-bottom: 0 !important;
+}
+
+.checkbox-input {
+  position: absolute;
+  inset: 0;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkbox-box {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid rgba(40, 90, 170, 0.3);
+  background: rgba(248, 251, 255, 0.9);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.checkbox-box svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.checkbox-input:hover ~ .checkbox-box {
+  border-color: var(--edu-blue);
+}
+
+.checkbox-input:checked ~ .checkbox-box {
+  background: var(--edu-blue);
+  border-color: var(--edu-blue);
+}
+
+.checkbox-input:checked ~ .checkbox-box svg {
+  opacity: 1;
+}
+
+.checkbox-input:focus-visible ~ .checkbox-box {
+  outline: 2px solid var(--edu-blue);
+  outline-offset: 2px;
+}
+
+.checkbox-text {
+  color: var(--edu-blue-dark);
+  font-size: 14px;
+  font-weight: 600;
+}
+
 /* O modal tem largura fixa e estreita: mantém o formulário de edição em coluna única */
 #edit-form .matricula-fields {
   grid-template-columns: 1fr;
