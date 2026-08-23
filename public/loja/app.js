@@ -258,6 +258,7 @@ function openModal(id) {
   document.getElementById("modal-detail").innerHTML = [
     detailRow("Aluno", m.nome_aluno),
     detailRow("RA", m.ra_aluno),
+    detailRow("Série", m.serie_aluno || "-"),
     detailRow("Responsável", m.nome_responsavel),
     detailRow("CPF", formatCPFDisplay(m.cpf_responsavel)),
     detailRow("Telefone", m.telefone),
