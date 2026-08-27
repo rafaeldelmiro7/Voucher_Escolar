@@ -96,12 +96,17 @@ export async function onRequestPost({ request, env }) {
   const voucherValor = calcularVoucherValor(data_matricula);
   const alunoNovo = body.aluno_novo ? 1 : 0;
 
-  // A numeração do voucher é "contar quantos existem e usar o próximo número".
-  // Com várias escolas cadastrando ao mesmo tempo, duas requisições podem
-  // calcular o mesmo próximo número — o índice único da tabela rejeita a
-  // segunda. Em vez de quebrar com erro 500, tentamos de novo com a
-  // contagem atualizada (o número de tentativas cobre bem esse tipo de
-  // colisão eventual, sem precisar de um mecanismo de fila mais complexo).
+  // O número do voucher precisa ser o MAIOR já usado + 1 (não "quantos
+  // existem" + 1) — se algum registro com voucher já foi excluído em algum
+  // momento, a contagem fica menor que o maior número já emitido, e usar
+  // COUNT(*) geraria sempre um número já ocupado (erro 500 permanente).
+  // A elegibilidade (dentro do limite) continua usando COUNT(*): excluir
+  // uma matrícula libera a vaga pra outra pessoa, o que é o comportamento
+  // esperado.
+  //
+  // Também tentamos de novo em caso de colisão (duas escolas cadastrando ao
+  // mesmo tempo podem calcular o mesmo próximo número); o índice único
+  // rejeitaria a segunda, então recalculamos e tentamos de novo.
   const MAX_TENTATIVAS = 5;
   let lastRowId = null;
 
@@ -110,14 +115,15 @@ export async function onRequestPost({ request, env }) {
     const limite = configRow && configRow.valor ? parseInt(configRow.valor, 10) : null;
 
     const countRow = await env.DB.prepare(
-      "SELECT COUNT(*) AS total FROM matriculas WHERE voucher_numero IS NOT NULL"
+      "SELECT COUNT(*) AS total, COALESCE(MAX(voucher_numero), 0) AS maximo FROM matriculas WHERE voucher_numero IS NOT NULL"
     ).first();
     const totalAtual = countRow ? countRow.total : 0;
+    const maiorNumero = countRow ? countRow.maximo : 0;
 
     let voucherNumero = null;
     let voucherElegivel = 0;
     if (!limite || totalAtual < limite) {
-      voucherNumero = totalAtual + 1;
+      voucherNumero = maiorNumero + 1;
       voucherElegivel = 1;
     }
 
