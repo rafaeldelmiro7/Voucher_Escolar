@@ -93,50 +93,72 @@ export async function onRequestPost({ request, env }) {
     }
   }
 
-  const configRow = await env.DB.prepare("SELECT valor FROM config WHERE chave = 'limite_vouchers'").first();
-  const limite = configRow && configRow.valor ? parseInt(configRow.valor, 10) : null;
-
-  const countRow = await env.DB.prepare(
-    "SELECT COUNT(*) AS total FROM matriculas WHERE voucher_numero IS NOT NULL"
-  ).first();
-  const totalAtual = countRow ? countRow.total : 0;
-
-  let voucherNumero = null;
-  let voucherElegivel = 0;
-  if (!limite || totalAtual < limite) {
-    voucherNumero = totalAtual + 1;
-    voucherElegivel = 1;
-  }
-
   const voucherValor = calcularVoucherValor(data_matricula);
   const alunoNovo = body.aluno_novo ? 1 : 0;
 
-  const result = await env.DB.prepare(
-    `INSERT INTO matriculas
-      (nome_responsavel, cpf_responsavel, email, telefone, nome_aluno, ra_aluno, serie_aluno, data_matricula,
-       unidade_id, criado_por, voucher_numero, voucher_elegivel, voucher_valor, aluno_novo)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  )
-    .bind(
-      nome_responsavel,
-      cpf_responsavel,
-      email,
-      telefone,
-      nome_aluno,
-      ra_aluno,
-      serie_aluno,
-      data_matricula,
-      unidadeId,
-      session.uid,
-      voucherNumero,
-      voucherElegivel,
-      voucherValor,
-      alunoNovo
-    )
-    .run();
+  // A numeração do voucher é "contar quantos existem e usar o próximo número".
+  // Com várias escolas cadastrando ao mesmo tempo, duas requisições podem
+  // calcular o mesmo próximo número — o índice único da tabela rejeita a
+  // segunda. Em vez de quebrar com erro 500, tentamos de novo com a
+  // contagem atualizada (o número de tentativas cobre bem esse tipo de
+  // colisão eventual, sem precisar de um mecanismo de fila mais complexo).
+  const MAX_TENTATIVAS = 5;
+  let lastRowId = null;
+
+  for (let tentativa = 0; tentativa < MAX_TENTATIVAS; tentativa++) {
+    const configRow = await env.DB.prepare("SELECT valor FROM config WHERE chave = 'limite_vouchers'").first();
+    const limite = configRow && configRow.valor ? parseInt(configRow.valor, 10) : null;
+
+    const countRow = await env.DB.prepare(
+      "SELECT COUNT(*) AS total FROM matriculas WHERE voucher_numero IS NOT NULL"
+    ).first();
+    const totalAtual = countRow ? countRow.total : 0;
+
+    let voucherNumero = null;
+    let voucherElegivel = 0;
+    if (!limite || totalAtual < limite) {
+      voucherNumero = totalAtual + 1;
+      voucherElegivel = 1;
+    }
+
+    try {
+      const result = await env.DB.prepare(
+        `INSERT INTO matriculas
+          (nome_responsavel, cpf_responsavel, email, telefone, nome_aluno, ra_aluno, serie_aluno, data_matricula,
+           unidade_id, criado_por, voucher_numero, voucher_elegivel, voucher_valor, aluno_novo)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      )
+        .bind(
+          nome_responsavel,
+          cpf_responsavel,
+          email,
+          telefone,
+          nome_aluno,
+          ra_aluno,
+          serie_aluno,
+          data_matricula,
+          unidadeId,
+          session.uid,
+          voucherNumero,
+          voucherElegivel,
+          voucherValor,
+          alunoNovo
+        )
+        .run();
+      lastRowId = result.meta.last_row_id;
+      break;
+    } catch (e) {
+      const msg = String((e && e.message) || e);
+      const isColisaoVoucher = msg.includes("UNIQUE") && msg.includes("voucher_numero");
+      if (isColisaoVoucher && tentativa < MAX_TENTATIVAS - 1) {
+        continue;
+      }
+      throw e;
+    }
+  }
 
   const novaMatricula = await env.DB.prepare(`SELECT ${SELECT_FIELDS} FROM matriculas m LEFT JOIN unidades un ON un.id = m.unidade_id WHERE m.id = ?`)
-    .bind(result.meta.last_row_id)
+    .bind(lastRowId)
     .first();
 
   return jsonResponse({ matricula: novaMatricula }, { status: 201 });
