@@ -364,8 +364,15 @@ document.getElementById("logout-btn").addEventListener("click", async () => {
   window.location.href = "/";
 });
 
-function buildRelatorioHtml(matriculas, unidadeNome) {
+const RELATORIO_TITULOS = {
+  retirado: { titulo: "Relatório de Materiais Retirados", vazio: "Nenhum material retirado encontrado.", contagem: "retirada(s)" },
+  aguardando_retirada: { titulo: "Relatório de Aguardando Retirada", vazio: "Nenhuma matrícula aguardando retirada.", contagem: "matrícula(s)" },
+  "": { titulo: "Relatório de Matrículas com Voucher", vazio: "Nenhuma matrícula encontrada.", contagem: "matrícula(s)" },
+};
+
+function buildRelatorioHtml(matriculas, unidadeNome, statusFiltro) {
   const agora = new Date().toLocaleString("pt-BR");
+  const { titulo, vazio, contagem } = RELATORIO_TITULOS[statusFiltro] || RELATORIO_TITULOS[""];
   const linhas = matriculas
     .map(
       (m, i) => `
@@ -377,9 +384,9 @@ function buildRelatorioHtml(matriculas, unidadeNome) {
           <td>${formatCPFDisplay(m.cpf_responsavel)}</td>
           <td>${m.unidade_sigla || "-"}</td>
           <td>${m.voucher_numero ? "#" + m.voucher_numero : "-"}</td>
-          <td>${m.retirada_nome || "-"}</td>
-          <td>${m.retirada_parentesco || "-"}</td>
-          <td>${formatDateTime(m.retirada_data)}</td>
+          <td>${m.status === "retirado" ? m.retirada_nome || "-" : "-"}</td>
+          <td>${m.status === "retirado" ? m.retirada_parentesco || "-" : "-"}</td>
+          <td>${m.status === "retirado" ? formatDateTime(m.retirada_data) : "-"}</td>
         </tr>`
     )
     .join("");
@@ -388,7 +395,7 @@ function buildRelatorioHtml(matriculas, unidadeNome) {
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
-<title>Relatório de Retiradas - ${unidadeNome}</title>
+<title>${titulo} - ${unidadeNome}</title>
 <style>
   * { box-sizing: border-box; }
   body { font-family: Arial, Helvetica, sans-serif; color: #0b376d; padding: 32px; }
@@ -404,7 +411,7 @@ function buildRelatorioHtml(matriculas, unidadeNome) {
 </style>
 </head>
 <body>
-  <h1>Relatório de Materiais Retirados</h1>
+  <h1>${titulo}</h1>
   <div class="meta">
     Rede Adventista de Educação (ASuR) &middot; Unidade: <strong>${unidadeNome}</strong> &middot; Gerado em ${agora}
   </div>
@@ -416,10 +423,10 @@ function buildRelatorioHtml(matriculas, unidadeNome) {
       </tr>
     </thead>
     <tbody>
-      ${linhas || '<tr><td colspan="10" style="text-align:center;color:#999">Nenhum material retirado encontrado.</td></tr>'}
+      ${linhas || `<tr><td colspan="10" style="text-align:center;color:#999">${vazio}</td></tr>`}
     </tbody>
   </table>
-  <div class="total">Total: ${matriculas.length} retirada(s)</div>
+  <div class="total">Total: ${matriculas.length} ${contagem}</div>
 </body>
 </html>`;
 }
@@ -440,16 +447,16 @@ document.getElementById("print-btn").addEventListener("click", async () => {
     const unidadeSelect = document.getElementById("unidade-filter");
     const unidadeId = unidadeSelect.value;
     const unidadeNome = unidadeId ? unidadeSelect.options[unidadeSelect.selectedIndex].textContent : "Todas as unidades";
+    const statusFiltro = document.getElementById("status-filter").value;
 
-    const params = new URLSearchParams();
-    params.set("context", "loja");
-    params.set("status", "retirado");
-    if (unidadeId) params.set("unidade", unidadeId);
+    // Usa o mesmo filtro de status selecionado na tela, em vez de sempre
+    // restringir a "retirado" — assim o relatório reflete o que o usuário está vendo.
+    const params = buildListaParams();
 
     const data = await api.get(`/api/matriculas?${params.toString()}`);
 
     printWindow.document.open();
-    printWindow.document.write(buildRelatorioHtml(data.matriculas, unidadeNome));
+    printWindow.document.write(buildRelatorioHtml(data.matriculas, unidadeNome, statusFiltro));
     printWindow.document.close();
     printWindow.onload = () => printWindow.print();
   } catch (e) {
