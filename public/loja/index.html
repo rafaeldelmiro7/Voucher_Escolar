@@ -48,40 +48,61 @@
     </header>
 
     <main class="app-main">
-      <div class="panel retiradas-card">
-        <div class="retiradas-card-header">
-          <div class="retiradas-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 7 12 3 4 7l8 4 8-4Z" />
-              <path d="M4 7v10l8 4 8-4V7" />
-              <path d="M12 11v10" />
-            </svg>
+      <div class="panel bi-card" id="bi-card">
+        <div class="bi-header">
+          <div class="bi-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9M9 21V3M15 21v-7M21 21V11"/></svg>
           </div>
-          <div class="retiradas-card-title">
-            <h2>Retiradas de material escolar</h2>
-            <p class="retiradas-subtitle">Confira as matrículas com voucher e registre a entrega do material.</p>
+          <div>
+            <h2>Painel de vouchers</h2>
+            <p class="bi-subtitle">Números gerais da campanha, atualizados em tempo real.</p>
           </div>
-          <span id="total-label" class="retiradas-total"></span>
+          <div class="bi-total" id="bi-total">
+            <span class="bi-total-label">Valor total em vouchers emitidos</span>
+            <span class="bi-total-value" id="bi-total-value">Carregando...</span>
+          </div>
         </div>
-        <div class="retiradas-divider" aria-hidden="true"></div>
+        <div id="bi-unidades" class="bi-unidades">
+          <p class="loading">Carregando estatísticas...</p>
+        </div>
+      </div>
 
-        <div class="search-box">
-          <div class="search-input-wrap">
-            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-            <input type="text" id="search-input" placeholder="Buscar por aluno, responsável, CPF ou RA..." />
+      <div class="panel retiradas-card">
+        <div class="retiradas-sticky-top" id="retiradas-sticky-top">
+          <div class="retiradas-card-header">
+            <div class="retiradas-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 7 12 3 4 7l8 4 8-4Z" />
+                <path d="M4 7v10l8 4 8-4V7" />
+                <path d="M12 11v10" />
+              </svg>
+            </div>
+            <div class="retiradas-card-title">
+              <h2>Retiradas de material escolar</h2>
+              <p class="retiradas-subtitle">Confira as matrículas com voucher e registre a entrega do material.</p>
+            </div>
+            <span id="total-label" class="retiradas-total"></span>
           </div>
-          <select id="status-filter">
-            <option value="aguardando_retirada">Aguardando retirada</option>
-            <option value="retirado">Já retirado</option>
-            <option value="">Todos</option>
-          </select>
-          <select id="unidade-filter">
-            <option value="">Todas as unidades</option>
-          </select>
-          <button type="button" class="btn btn-outline btn-sm print-btn" id="print-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg>
-            Imprimir relatório
-          </button>
+          <div class="retiradas-divider" aria-hidden="true"></div>
+
+          <div class="search-box">
+            <div class="search-input-wrap">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="search-input" placeholder="Buscar por aluno, responsável, CPF ou RA..." />
+            </div>
+            <select id="status-filter">
+              <option value="aguardando_retirada">Aguardando retirada</option>
+              <option value="retirado">Já retirado</option>
+              <option value="">Todos</option>
+            </select>
+            <select id="unidade-filter">
+              <option value="">Todas as unidades</option>
+            </select>
+            <button type="button" class="btn btn-outline btn-sm print-btn" id="print-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg>
+              Imprimir relatório
+            </button>
+          </div>
         </div>
 
         <div id="lista-wrap" class="table-wrap">
@@ -188,6 +209,7 @@
   </div>
 
   <script src="/js/api.js"></script>
+  <script src="/js/voucher-valor.js"></script>
   <script src="/loja/app.js"></script>
 </body>
 </html>

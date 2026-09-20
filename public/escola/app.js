@@ -288,6 +288,8 @@ async function init() {
   attachMask(document.getElementById("telefone"), maskPhone);
   attachMask(document.getElementById("edit_cpf_responsavel"), maskCPF);
   attachMask(document.getElementById("edit_telefone"), maskPhone);
+  attachMask(document.getElementById("ra_aluno"), maskDigitsOnly);
+  attachMask(document.getElementById("edit_ra_aluno"), maskDigitsOnly);
 
   loadLista();
 }

@@ -15,6 +15,10 @@ function maskPhone(value) {
   return digits.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3").trim().replace(/-$/, "");
 }
 
+function maskDigitsOnly(value) {
+  return value.replace(/\D/g, "");
+}
+
 function attachMask(input, fn) {
   input.addEventListener("input", () => {
     const cursorAtEnd = input.selectionStart === input.value.length;

@@ -170,6 +170,10 @@ fotoInput.addEventListener("change", (ev) => {
   fotoPreview.style.display = "block";
 });
 
+function displayVoucherValor(m) {
+  return m.aluno_novo ? "Kit Escolar" : formatVoucherValor(m.voucher_valor);
+}
+
 function statusBadge(m) {
   if (m.status === "retirado") return '<span class="badge badge-done">Retirado</span>';
   if (!m.voucher_elegivel) return '<span class="badge badge-none">Sem voucher</span>';
@@ -264,6 +268,7 @@ function openModal(id) {
     detailRow("Telefone", m.telefone),
     detailRow("Unidade", m.unidade_nome || "-"),
     detailRow("Data da matrícula", formatDate(m.data_matricula)),
+    detailRow("Valor do voucher", m.voucher_elegivel ? displayVoucherValor(m) : "-"),
     detailRow("Voucher", m.voucher_elegivel ? "#" + m.voucher_numero : "Sem voucher"),
   ].join("");
 
@@ -461,6 +466,45 @@ document.getElementById("print-btn").addEventListener("click", async () => {
   }
 });
 
+async function loadEstatisticas() {
+  const totalValueEl = document.getElementById("bi-total-value");
+  const wrap = document.getElementById("bi-unidades");
+  try {
+    const data = await api.get("/api/estatisticas");
+    totalValueEl.textContent = formatVoucherValor(data.valor_total_geral_centavos);
+
+    if (!data.unidades.length) {
+      wrap.innerHTML = '<p class="empty-state">Nenhuma unidade cadastrada.</p>';
+      return;
+    }
+
+    wrap.innerHTML = data.unidades
+      .map(
+        (u) => `
+      <div class="bi-unidade-card">
+        <span class="bi-unidade-sigla">${u.sigla || u.nome}</span>
+        <span class="bi-unidade-count">${u.total_vouchers} voucher(s)</span>
+        <span class="bi-unidade-valor">${formatVoucherValor(u.valor_total_centavos)}</span>
+      </div>`
+      )
+      .join("");
+  } catch (e) {
+    totalValueEl.textContent = "-";
+    wrap.innerHTML = `<div class="alert alert-error">${e.message}</div>`;
+  }
+}
+
+function updateStickyOffsets() {
+  const header = document.querySelector(".app-header");
+  const stickyTop = document.getElementById("retiradas-sticky-top");
+  if (!header || !stickyTop) return;
+  const headerHeight = header.offsetHeight;
+  document.documentElement.style.setProperty("--app-header-h", `${headerHeight}px`);
+  document.documentElement.style.setProperty("--sticky-top-h", `${stickyTop.offsetHeight}px`);
+}
+
+window.addEventListener("resize", updateStickyOffsets);
+
 async function init() {
   try {
     currentUser = await api.get("/api/auth/me");
@@ -499,6 +543,9 @@ async function init() {
   }
 
   loadLista();
+  loadEstatisticas();
+  updateStickyOffsets();
+  setTimeout(updateStickyOffsets, 300);
 }
 
 init();
