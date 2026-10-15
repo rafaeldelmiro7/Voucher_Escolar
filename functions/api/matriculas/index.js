@@ -20,6 +20,7 @@ export async function onRequestGet({ request, env }) {
   const statusFilter = url.searchParams.get("status") || "";
   const context = url.searchParams.get("context") || "";
   const unidadeFilter = parseInt(url.searchParams.get("unidade"), 10) || null;
+  const serieFilter = (url.searchParams.get("serie") || "").trim();
 
   let query = `SELECT ${SELECT_FIELDS} FROM matriculas m LEFT JOIN unidades un ON un.id = m.unidade_id WHERE 1=1`;
   const params = [];
@@ -38,6 +39,11 @@ export async function onRequestGet({ request, env }) {
   if (unidadeFilter && (session.role === "loja" || session.role === "admin")) {
     query += " AND m.unidade_id = ?";
     params.push(unidadeFilter);
+  }
+
+  if (serieFilter) {
+    query += " AND m.serie_aluno = ?";
+    params.push(serieFilter);
   }
 
   if (statusFilter === "aguardando_retirada" || statusFilter === "retirado") {
