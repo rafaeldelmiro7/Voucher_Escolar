@@ -232,12 +232,14 @@ function buildListaParams() {
   const status = document.getElementById("status-filter").value;
   const unidade = document.getElementById("unidade-filter").value;
   const serie = document.getElementById("serie-filter").value;
+  const voucher = document.getElementById("voucher-filter").value;
   const params = new URLSearchParams();
   params.set("context", "loja");
   if (q) params.set("q", q);
   if (status) params.set("status", status);
   if (unidade) params.set("unidade", unidade);
   if (serie) params.set("serie", serie);
+  if (voucher) params.set("voucher", voucher);
   return params;
 }
 
@@ -366,6 +368,7 @@ document.getElementById("search-input").addEventListener("input", () => {
 document.getElementById("status-filter").addEventListener("change", loadLista);
 document.getElementById("unidade-filter").addEventListener("change", loadLista);
 document.getElementById("serie-filter").addEventListener("change", loadLista);
+document.getElementById("voucher-filter").addEventListener("change", loadLista);
 
 document.getElementById("logout-btn").addEventListener("click", async () => {
   await api.post("/api/auth/logout");

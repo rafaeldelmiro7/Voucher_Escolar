@@ -21,6 +21,7 @@ export async function onRequestGet({ request, env }) {
   const context = url.searchParams.get("context") || "";
   const unidadeFilter = parseInt(url.searchParams.get("unidade"), 10) || null;
   const serieFilter = (url.searchParams.get("serie") || "").trim();
+  const voucherFilter = url.searchParams.get("voucher") || "";
 
   let query = `SELECT ${SELECT_FIELDS} FROM matriculas m LEFT JOIN unidades un ON un.id = m.unidade_id WHERE 1=1`;
   const params = [];
@@ -44,6 +45,14 @@ export async function onRequestGet({ request, env }) {
   if (serieFilter) {
     query += " AND m.serie_aluno = ?";
     params.push(serieFilter);
+  }
+
+  // Tipo de voucher: aluno novo recebe Kit Escolar; os demais, o valor em dinheiro.
+  if (voucherFilter === "kit") {
+    query += " AND m.aluno_novo = 1";
+  } else if (voucherFilter === "300" || voucherFilter === "400") {
+    query += " AND m.aluno_novo = 0 AND m.voucher_valor = ?";
+    params.push(parseInt(voucherFilter, 10) * 100);
   }
 
   if (statusFilter === "aguardando_retirada" || statusFilter === "retirado") {
